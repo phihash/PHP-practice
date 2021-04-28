@@ -1,11 +1,19 @@
 <?php
 
-class Employee{
-    public $name;
+abstract class Employee{
+    private $name;
+    private $type;
     private $state='働いている';
-    const REGULAR=0x02;//正社員
 
-    public static $company='技術評論社';
+    private static $company='技術評論社';
+    const REGULAR=0x02;//正社員
+    const PARTTIME=0x01;
+    const CONTRACT=0x04;
+
+    public function __construct($name,$type){
+        $this->name=$name;
+        $this->type=$type;
+    }
 
     public function getState(){
         return $this->state;
@@ -15,30 +23,30 @@ class Employee{
          $this->state = $state;
     }
 
-    public function work(){
-        echo '書類を整理しています';
-    }
-
-    public function getCompany(){
+    public static function getCompany(){//staticメソッドの中ではthisは使えません
         echo self::$company ;//あくまでクラス内で用いる
     }
+
+    public static function setCompany($value){
+        self::$company=$value;
+    }
+
+    abstract public function work();
 }
 
-$yamada=new Employee();
+class Programmer extends Employee{
 
-$yamada->name='山田';
+    public function __construct($name,$type){
+        parent::__construct($name,$type);
 
-$yamada->setState('休憩している');
 
-echo $yamada->name.'さんは'.$yamada->getState();
+    }
 
-echo Employee::$company;
 
-$yamada->work();
-
-$yamada->getCompany();
-
-echo Employee::REGULAR
+    public function work(){
+        echo 'プログラムを書いています';
+    }
+}
 
 //オブジェクトへの参照を渡している
 
